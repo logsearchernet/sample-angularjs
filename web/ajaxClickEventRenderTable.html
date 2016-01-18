@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    </head>
+    <body>
+        <div ng-app="myApp" ng-controller="customersCtrl"> 
+            <p>
+                <button ng-click="getMethod()">Get Method</button>
+                <button ng-click="postMethod()">Post Method</button>
+            </p>
+            <table>
+                <thead ng-show="names.length">
+                    <tr style="background-color: yellow;">
+                        <td>Name</td>
+                        <td>Country</td>
+                    </tr>
+                </thead>
+                <tbody ng-show="names.length">
+                    <tr ng-repeat="x in names">
+                        <td>{{ x.Name}}</td>
+                        <td>{{ x.Country}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+        <script>
+            var app = angular.module('myApp', []);
+            app.controller('customersCtrl', function ($scope, $http) {
+                $scope.getMethod = function () {
+                    alert("Note Get");
+                    /*
+                     { "records":[ {"Name":"Alfreds Futterkiste","City":"Berlin","Country":"Germany"}, {"Name":"Ana Trujillo Emparedados y helados","City":"México D.F.","Country":"Mexico"}, {"Name":"Antonio Moreno Taquería","City":"México D.F.","Country":"Mexico"}, {"Name":"Around the Horn","City":"London","Country":"UK"}, {"Name":"B's Beverages","City":"London","Country":"UK"}, {"Name":"Berglunds snabbköp","City":"Luleå","Country":"Sweden"}, {"Name":"Blauer See Delikatessen","City":"Mannheim","Country":"Germany"}, {"Name":"Blondel père et fils","City":"Strasbourg","Country":"France"}, {"Name":"Bólido Comidas preparadas","City":"Madrid","Country":"Spain"}, {"Name":"Bon app'","City":"Marseille","Country":"France"}, {"Name":"Bottom-Dollar Marketse","City":"Tsawassen","Country":"Canada"}, {"Name":"Cactus Comidas para llevar","City":"Buenos Aires","Country":"Argentina"}, {"Name":"Centro comercial Moctezuma","City":"México D.F.","Country":"Mexico"}, {"Name":"Chop-suey Chinese","City":"Bern","Country":"Switzerland"}, {"Name":"Comércio Mineiro","City":"São Paulo","Country":"Brazil"} ] }
+                     */
+                    $http.get("http://localhost:8080/sample-angularjs/customerServlet")
+                            .then(function (response) {
+                                $scope.names = response.data.records;
+                            });
+                };
+
+                $scope.postMethod = function () {
+                    alert("Note Post");
+                    //post(url, data, [config]);
+                    var data = new Object();
+                    data.id = 123;
+                    data.name = "Alan";
+                    $http.post("http://localhost:8080/sample-angularjs/customerServlet", JSON.stringify(data))
+                            .then(function (response) {
+                                $scope.names = response.data.records;
+                            });
+                };
+            });
+        </script>
+    </body>
+</html>
