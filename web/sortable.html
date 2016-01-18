@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>sortable</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.4/angular.min.js"></script>
+        <script src="https://rawgithub.com/angular-ui/ui-sortable/master/src/sortable.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+        <style>
+            .list {
+                list-style: none outside none;
+                margin: 10px 0 30px;
+            }
+
+            .item {
+                width: 200px;
+                padding: 5px 10px;
+                margin: 5px 0;
+
+                font-size: 1.1em;
+                font-weight: bold;
+                text-align: center;
+
+            }
+
+            .myHandle {
+                cursor: move;
+            }
+
+
+
+        </style>
+    </head>
+    <body>
+        <div ng-app="sortableApp" ng-controller="sortableController" class="container">
+            <h2>ui.sortable demo</h2>
+
+            <div class="floatleft">
+                <ul ui-sortable="sortableOptions" ng-model="list" class="list">
+                    <li ng-repeat="item in list" class="item">
+                        <i class="fa fa-arrows myHandle"> </i> <input type="text" value="{{item.text}}"/>
+                    </li>
+                </ul>
+            </div>
+
+
+
+            <script>
+            var myapp = angular.module('sortableApp', ['ui.sortable']);
+
+                    myapp.controller('sortableController', function ($scope) {
+                        var tmpList = [];
+
+                        for (var i = 1; i <= 6; i++) {
+                            tmpList.push({
+                                text: 'Item ' + i,
+                                value: i
+                            });
+                        }
+                        console.log(JSON.stringify(tmpList));
+                        $scope.list = tmpList;
+                        $scope.sortableOptions = {
+                            handle: '> .myHandle',
+                            update: function (e, ui) {
+                                var logEntry = tmpList.map(function (i) {
+                                    return i.value;
+                                }).join(', ');
+                                console.log('Update: ' + logEntry);
+                            },
+                            stop: function (e, ui) {
+                                // this callback has the changed model
+                                var logEntry = tmpList.map(function (i) {
+                                    return i.value;
+                                }).join(', ');
+                        console.log('Stop: ' + logEntry);
+                    }
+                };
+            });
+            </script>
+        </div>
+
+    </body>
+
+</html>
